@@ -8,6 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const wardrobeRoutes = require('./routes/wardrobeRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/outfits', wardrobeRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/contact', contactRoutes);
 
 app.use((req, res) => res.status(404).json({ error: 'Not found.' }));
 

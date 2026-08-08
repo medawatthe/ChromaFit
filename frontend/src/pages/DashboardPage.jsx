@@ -133,7 +133,11 @@ export default function DashboardPage() {
         <WardrobeMiniList
           title="📦 Unused Clothes"
           items={stats.unused}
-          emptyText="Everything in your wardrobe has been worn at least once!"
+          emptyText={
+            stats.totals.total_items === 0
+              ? 'Add items to your wardrobe to see this.'
+              : 'Everything in your wardrobe has been worn at least once!'
+          }
         />
       </div>
     </Layout>

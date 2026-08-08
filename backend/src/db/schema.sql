@@ -100,3 +100,11 @@ CREATE TABLE IF NOT EXISTS wear_log (
 
 CREATE INDEX IF NOT EXISTS idx_wear_log_outfit_id ON wear_log(outfit_id);
 CREATE INDEX IF NOT EXISTS idx_wear_log_user_id ON wear_log(user_id);
+
+CREATE TABLE IF NOT EXISTS contact_messages (
+    id           SERIAL PRIMARY KEY,
+    name         VARCHAR(150) NOT NULL,
+    email        VARCHAR(255) NOT NULL,
+    message      TEXT NOT NULL,
+    created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+);

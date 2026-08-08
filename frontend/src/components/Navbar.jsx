@@ -1,11 +1,16 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-const links = [
+const primaryLinks = [
   { to: '/dashboard', label: 'Dashboard' },
   { to: '/wardrobe', label: 'Wardrobe' },
   { to: '/chat', label: 'AI Stylist' },
   { to: '/profile', label: 'Profile' },
+];
+
+const secondaryLinks = [
+  { to: '/about', label: 'About Us' },
+  { to: '/contact', label: 'Contact Us' },
 ];
 
 export default function Navbar() {
@@ -26,8 +31,8 @@ export default function Navbar() {
           </span>
         </NavLink>
 
-        <nav className="hidden gap-1 md:flex">
-          {links.map((link) => (
+        <nav className="hidden items-center gap-1 md:flex">
+          {primaryLinks.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
@@ -36,6 +41,24 @@ export default function Navbar() {
                   isActive
                     ? 'bg-brand-100 text-brand-700'
                     : 'text-gray-600 hover:bg-gray-100'
+                }`
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
+
+          <span className="mx-1 h-5 w-px bg-gray-200" />
+
+          {secondaryLinks.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              className={({ isActive }) =>
+                `rounded-full px-3 py-2 text-sm transition ${
+                  isActive
+                    ? 'bg-brand-100 text-brand-700'
+                    : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600'
                 }`
               }
             >
@@ -58,7 +81,7 @@ export default function Navbar() {
       </div>
 
       <nav className="flex justify-around border-t border-gray-200 bg-white md:hidden">
-        {links.map((link) => (
+        {primaryLinks.map((link) => (
           <NavLink
             key={link.to}
             to={link.to}
