@@ -43,7 +43,7 @@ async function analyzeOutfit(req, res) {
     return res.status(201).json({ analysis: insertResult.rows[0] });
   } catch (err) {
     console.error('Analyze outfit error:', err);
-    return res.status(500).json({ error: 'Failed to analyze outfit. Check that OPENAI_API_KEY is set correctly.' });
+    return res.status(500).json({ error: 'Failed to analyze outfit. Check that GEMINI_API_KEY is set correctly.' });
   }
 }
 

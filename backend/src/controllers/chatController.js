@@ -7,6 +7,9 @@ async function sendMessage(req, res) {
     return res.status(400).json({ error: 'Message is required.' });
   }
 
+  const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+  const imagePath = req.file ? req.file.path : null;
+
   try {
     const userResult = await pool.query(
       'SELECT skin_tone, body_shape, fashion_style_preference, favorite_colors FROM users WHERE id = $1',
@@ -22,17 +25,17 @@ async function sendMessage(req, res) {
       wardrobeByCategory: wardrobeSummary.rows,
     };
 
-    const response = await aiService.chatWithStylist(message, context);
+    const response = await aiService.chatWithStylist(message, context, imagePath);
 
     const insertResult = await pool.query(
-      `INSERT INTO chat_history (user_id, message, response) VALUES ($1,$2,$3) RETURNING *`,
-      [req.user.id, message, response]
+      `INSERT INTO chat_history (user_id, message, response, image_url) VALUES ($1,$2,$3,$4) RETURNING *`,
+      [req.user.id, message, response, imageUrl]
     );
 
     return res.status(201).json({ chat: insertResult.rows[0] });
   } catch (err) {
     console.error('Chat error:', err);
-    return res.status(500).json({ error: 'Failed to get a response from the AI stylist. Check that OPENAI_API_KEY is set correctly.' });
+    return res.status(500).json({ error: 'Failed to get a response from the AI stylist. Check that GEMINI_API_KEY is set correctly.' });
   }
 }
 

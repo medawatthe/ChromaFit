@@ -13,6 +13,6 @@ module.exports = {
     secret: process.env.JWT_SECRET || 'dev_secret',
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   },
-  openaiApiKey: process.env.OPENAI_API_KEY,
+  geminiApiKey: process.env.GEMINI_API_KEY,
   frontendOrigin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
 };

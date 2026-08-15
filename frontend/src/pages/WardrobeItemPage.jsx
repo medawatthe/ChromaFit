@@ -8,6 +8,7 @@ export default function WardrobeItemPage() {
   const navigate = useNavigate();
   const [outfit, setOutfit] = useState(null);
   const [analysis, setAnalysis] = useState(null);
+  const [siblingIds, setSiblingIds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -28,6 +29,33 @@ export default function WardrobeItemPage() {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  useEffect(() => {
+    async function loadSiblingIds() {
+      try {
+        const { data } = await client.get('/outfits');
+        setSiblingIds(data.outfits.map((o) => o.id));
+      } catch {
+        setSiblingIds([]);
+      }
+    }
+    loadSiblingIds();
+  }, []);
+
+  const currentIndex = siblingIds.indexOf(Number(id));
+  const prevId = currentIndex > 0 ? siblingIds[currentIndex - 1] : null;
+  const nextId =
+    currentIndex >= 0 && currentIndex < siblingIds.length - 1 ? siblingIds[currentIndex + 1] : null;
+
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'ArrowLeft' && prevId) navigate(`/wardrobe/${prevId}`);
+      if (e.key === 'ArrowRight' && nextId) navigate(`/wardrobe/${nextId}`);
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [prevId, nextId, navigate]);
 
   async function handleMarkWorn() {
     try {
@@ -66,17 +94,44 @@ export default function WardrobeItemPage() {
 
   return (
     <Layout>
-      <button onClick={() => navigate('/wardrobe')} className="mb-4 text-sm text-brand-600 hover:underline">
-        ← Back to wardrobe
-      </button>
+      <div className="mb-4 flex items-center justify-between">
+        <button onClick={() => navigate('/wardrobe')} className="text-sm text-brand-600 hover:underline">
+          ← Back to wardrobe
+        </button>
+        {siblingIds.length > 1 && (
+          <span className="text-xs text-gray-400">
+            {currentIndex + 1} of {siblingIds.length} · use ← → to browse
+          </span>
+        )}
+      </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div>
-          <img
-            src={outfitImageUrl(outfit.image_url)}
-            alt={outfit.clothing_name || 'Wardrobe item'}
-            className="w-full rounded-2xl border border-gray-200 object-cover"
-          />
+          <div className="group relative overflow-hidden rounded-2xl border border-gray-200">
+            <img
+              src={outfitImageUrl(outfit.image_url)}
+              alt={outfit.clothing_name || 'Wardrobe item'}
+              className="w-full object-cover"
+            />
+            {prevId && (
+              <button
+                onClick={() => navigate(`/wardrobe/${prevId}`)}
+                aria-label="Previous item"
+                className="absolute left-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-gray-700 opacity-0 shadow transition hover:bg-white group-hover:opacity-100"
+              >
+                ‹
+              </button>
+            )}
+            {nextId && (
+              <button
+                onClick={() => navigate(`/wardrobe/${nextId}`)}
+                aria-label="Next item"
+                className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-gray-700 opacity-0 shadow transition hover:bg-white group-hover:opacity-100"
+              >
+                ›
+              </button>
+            )}
+          </div>
           <div className="mt-4 flex flex-wrap gap-3">
             <button
               onClick={handleMarkWorn}

@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
-import client from '../api/client';
+import client, { outfitImageUrl } from '../api/client';
 import Layout from '../components/Layout';
 
 export default function ChatPage() {
   const [history, setHistory] = useState([]);
   const [message, setMessage] = useState('');
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
+  const fileInputRef = useRef(null);
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -28,19 +31,43 @@ export default function ChatPage() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [history]);
 
+  function handleImageChange(e) {
+    const file = e.target.files[0];
+    setImage(file || null);
+    setImagePreview(file ? URL.createObjectURL(file) : null);
+  }
+
+  function clearImage() {
+    setImage(null);
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  }
+
   async function handleSend(e) {
     e.preventDefault();
     if (!message.trim()) return;
     setError('');
     setSending(true);
-    const pending = message;
+    const pendingMessage = message;
+    const pendingImage = image;
     setMessage('');
+    clearImage();
     try {
-      const { data } = await client.post('/chat', { message: pending });
+      let data;
+      if (pendingImage) {
+        const formData = new FormData();
+        formData.append('message', pendingMessage);
+        formData.append('image', pendingImage);
+        ({ data } = await client.post('/chat', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }));
+      } else {
+        ({ data } = await client.post('/chat', { message: pendingMessage }));
+      }
       setHistory((prev) => [...prev, data.chat]);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to reach the AI stylist.');
-      setMessage(pending);
+      setMessage(pendingMessage);
     } finally {
       setSending(false);
     }
@@ -48,7 +75,7 @@ export default function ChatPage() {
 
   return (
     <Layout>
-      <h1 className="mb-4 text-2xl font-bold text-gray-900">🎙 AI Stylist Chat</h1>
+      <h1 className="mb-4 text-2xl font-bold text-gray-900">🤖 AI Stylist Chat</h1>
 
       <div className="flex h-[65vh] flex-col rounded-2xl border border-gray-200 bg-white shadow-sm">
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -56,15 +83,23 @@ export default function ChatPage() {
 
           {!loading && history.length === 0 && (
             <p className="text-sm text-gray-400">
-              Ask me anything — e.g. "What should I wear tomorrow?" or "Do I have a good outfit for an interview?"
+              Ask me anything — e.g. "What should I wear tomorrow?" — or attach a photo of an outfit
+              and ask what I think.
             </p>
           )}
 
           {history.map((entry) => (
             <div key={entry.id} className="space-y-2">
               <div className="flex justify-end">
-                <div className="max-w-[80%] rounded-2xl rounded-br-sm bg-brand-600 px-4 py-2 text-sm text-white">
-                  {entry.message}
+                <div className="max-w-[80%] space-y-2 rounded-2xl rounded-br-sm bg-brand-600 px-4 py-2 text-sm text-white">
+                  {entry.image_url && (
+                    <img
+                      src={outfitImageUrl(entry.image_url)}
+                      alt="Attached outfit"
+                      className="max-h-48 rounded-lg object-cover"
+                    />
+                  )}
+                  {entry.message && <p>{entry.message}</p>}
                 </div>
               </div>
               <div className="flex justify-start">
@@ -79,7 +114,35 @@ export default function ChatPage() {
 
         {error && <p className="px-4 pb-2 text-sm text-red-600">{error}</p>}
 
-        <form onSubmit={handleSend} className="flex gap-2 border-t border-gray-200 p-3">
+        {imagePreview && (
+          <div className="flex items-center gap-2 border-t border-gray-200 px-4 pt-3">
+            <img src={imagePreview} alt="Attachment preview" className="h-14 w-14 rounded-lg object-cover" />
+            <button
+              type="button"
+              onClick={clearImage}
+              className="text-xs font-medium text-red-600 hover:underline"
+            >
+              Remove
+            </button>
+          </div>
+        )}
+
+        <form onSubmit={handleSend} className="flex items-center gap-2 border-t border-gray-200 p-3">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            title="Attach a photo"
+            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-gray-300 text-lg text-gray-500 hover:bg-gray-50"
+          >
+            📎
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            onChange={handleImageChange}
+            className="hidden"
+          />
           <input
             type="text"
             value={message}

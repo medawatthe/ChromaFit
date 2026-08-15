@@ -2,12 +2,12 @@
 
 AI-powered personal fashion recommendation and wardrobe analytics web app.
 
-Stack: **React (Vite) + Tailwind CSS** frontend, **Node.js/Express** backend, **PostgreSQL** database, **OpenAI** for AI outfit analysis and the stylist chatbot.
+Stack: **React (Vite) + Tailwind CSS** frontend, **Node.js/Express** backend, **PostgreSQL** database, **Google Gemini (free tier)** for AI outfit analysis and the stylist chatbot.
 
 ## Project layout
 
 ```
-backend/    Express REST API, PostgreSQL access, OpenAI integration
+backend/    Express REST API, PostgreSQL access, Gemini API integration
 frontend/   React + Tailwind single-page app
 ```
 
@@ -15,7 +15,7 @@ frontend/   React + Tailwind single-page app
 
 - Node.js 18+ (already installed)
 - PostgreSQL (already installed locally via winget, running as the `postgresql-x64-17` service)
-- An OpenAI API key for real AI analysis and chatbot replies
+- A free Google Gemini API key for real AI analysis and chatbot replies (get one at https://aistudio.google.com/apikey — no billing required)
 
 ## First-time setup
 
@@ -37,7 +37,7 @@ cd backend
 npm install
 ```
 
-Edit `backend/.env` and replace `OPENAI_API_KEY` with your real key (starts with `sk-`). Until you do, registration/login/wardrobe CRUD all work — only "Analyze with AI" and the chatbot will fail.
+Edit `backend/.env` and replace `GEMINI_API_KEY` with your real key from https://aistudio.google.com/apikey. Until you do, registration/login/wardrobe CRUD all work — only "Analyze with AI" and the chatbot will fail.
 
 ```powershell
 npm run dev      # starts on http://localhost:5000
@@ -58,7 +58,7 @@ Open http://localhost:5173 in your browser, register an account, and start addin
 - Registration & login (JWT-based), full profile editing
 - Wardrobe CRUD with image upload (name, category, brand, colors, pattern, material, fit, season, occasion, price, notes, etc.)
 - Dashboard: total/worn/unused item counts, sustainability score, top categories, favorite colors, average AI fashion score
-- AI outfit analysis per item (dominant colors, skin-tone match, colour harmony %, fashion score 0–10, occasion fit, styling summary) via OpenAI vision
+- AI outfit analysis per item (dominant colors, skin-tone match, colour harmony %, fashion score 0–10, occasion fit, styling summary) via Gemini vision
 - AI stylist chatbot with persisted chat history
 
 ## Not yet built

@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const primaryLinks = [
-  { to: '/dashboard', label: 'Dashboard' },
+  { to: '/dashboard', label: 'Home' },
   { to: '/wardrobe', label: 'Wardrobe' },
   { to: '/chat', label: 'AI Stylist' },
   { to: '/profile', label: 'Profile' },

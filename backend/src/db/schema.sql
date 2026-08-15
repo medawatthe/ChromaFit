@@ -85,8 +85,11 @@ CREATE TABLE IF NOT EXISTS chat_history (
     user_id      INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     message      TEXT NOT NULL,
     response     TEXT NOT NULL,
+    image_url    TEXT,
     created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+ALTER TABLE chat_history ADD COLUMN IF NOT EXISTS image_url TEXT;
 
 CREATE INDEX IF NOT EXISTS idx_chat_history_user_id ON chat_history(user_id);
 

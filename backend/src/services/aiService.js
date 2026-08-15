@@ -1,55 +1,61 @@
 const fs = require('fs');
 const path = require('path');
-const OpenAI = require('openai');
+const { GoogleGenerativeAI, SchemaType } = require('@google/generative-ai');
 const config = require('../config/env');
 
-const client = new OpenAI({ apiKey: config.openaiApiKey });
+const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 
-const VISION_MODEL = 'gpt-4o-mini';
-const CHAT_MODEL = 'gpt-4o-mini';
+const MODEL_NAME = 'gemini-flash-lite-latest';
 
-function imageToDataUrl(imagePath) {
+function imageToInlinePart(imagePath) {
   const ext = path.extname(imagePath).slice(1).toLowerCase();
-  const mime = ext === 'jpg' ? 'jpeg' : ext;
-  const buffer = fs.readFileSync(imagePath);
-  return `data:image/${mime};base64,${buffer.toString('base64')}`;
+  const mimeType = ext === 'jpg' ? 'image/jpeg' : `image/${ext}`;
+  const data = fs.readFileSync(imagePath).toString('base64');
+  return { inlineData: { mimeType, data } };
 }
 
 const ANALYSIS_SYSTEM_PROMPT = `You are ChromaFit's fashion analysis engine. You analyze a photo of a single clothing
-item or outfit and return ONLY a JSON object with this exact shape:
-{
-  "dominant_colors": ["string", ...],
-  "skin_tone_category": "fair|light|medium|olive|tan|deep|unknown",
-  "color_harmony_score": number (0-100),
-  "fashion_score": number (0-10),
-  "occasion_match": "string describing best-fit occasions",
-  "ai_summary": "2-3 sentence human-readable styling summary and advice"
-}
+item or outfit and return a structured styling assessment.
 Base skin_tone_category on any visible skin in the image; if none is visible, use "unknown".
-Score fashion_score using colour harmony, fit, and styling coherence. Respond with JSON only, no markdown.`;
+Score fashion_score using colour harmony, fit, and styling coherence.`;
+
+const ANALYSIS_SCHEMA = {
+  type: SchemaType.OBJECT,
+  properties: {
+    dominant_colors: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+    skin_tone_category: { type: SchemaType.STRING },
+    color_harmony_score: { type: SchemaType.NUMBER },
+    fashion_score: { type: SchemaType.NUMBER },
+    occasion_match: { type: SchemaType.STRING },
+    ai_summary: { type: SchemaType.STRING },
+  },
+  required: [
+    'dominant_colors',
+    'skin_tone_category',
+    'color_harmony_score',
+    'fashion_score',
+    'occasion_match',
+    'ai_summary',
+  ],
+};
 
 async function analyzeOutfit(imagePath, userContext = {}) {
-  const dataUrl = imageToDataUrl(imagePath);
-
-  const response = await client.chat.completions.create({
-    model: VISION_MODEL,
-    response_format: { type: 'json_object' },
-    messages: [
-      { role: 'system', content: ANALYSIS_SYSTEM_PROMPT },
-      {
-        role: 'user',
-        content: [
-          {
-            type: 'text',
-            text: `Analyze this clothing item. User context: ${JSON.stringify(userContext)}`,
-          },
-          { type: 'image_url', image_url: { url: dataUrl } },
-        ],
-      },
-    ],
+  const model = genAI.getGenerativeModel({
+    model: MODEL_NAME,
+    systemInstruction: ANALYSIS_SYSTEM_PROMPT,
+    generationConfig: {
+      responseMimeType: 'application/json',
+      responseSchema: ANALYSIS_SCHEMA,
+    },
   });
 
-  const raw = response.choices[0].message.content;
+  const imagePart = imageToInlinePart(imagePath);
+  const result = await model.generateContent([
+    `Analyze this clothing item. User context: ${JSON.stringify(userContext)}`,
+    imagePart,
+  ]);
+
+  const raw = result.response.text();
   return { parsed: JSON.parse(raw), raw };
 }
 
@@ -57,16 +63,18 @@ const CHAT_SYSTEM_PROMPT = `You are the ChromaFit AI Stylist — a friendly, con
 Give practical outfit and wardrobe advice tailored to the user's profile and wardrobe summary provided in context.
 Keep replies to 2-4 sentences unless the user asks for a list.`;
 
-async function chatWithStylist(message, context = {}) {
-  const response = await client.chat.completions.create({
-    model: CHAT_MODEL,
-    messages: [
-      { role: 'system', content: CHAT_SYSTEM_PROMPT },
-      { role: 'user', content: `Context: ${JSON.stringify(context)}\n\nUser message: ${message}` },
-    ],
+async function chatWithStylist(message, context = {}, imagePath = null) {
+  const model = genAI.getGenerativeModel({
+    model: MODEL_NAME,
+    systemInstruction: CHAT_SYSTEM_PROMPT,
   });
 
-  return response.choices[0].message.content;
+  const promptText = `Context: ${JSON.stringify(context)}\n\nUser message: ${message}`;
+  const parts = imagePath ? [promptText, imageToInlinePart(imagePath)] : [promptText];
+
+  const result = await model.generateContent(parts);
+
+  return result.response.text();
 }
 
 module.exports = { analyzeOutfit, chatWithStylist };

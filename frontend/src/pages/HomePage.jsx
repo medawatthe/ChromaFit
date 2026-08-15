@@ -14,7 +14,7 @@ const FEATURES = [
     description: 'Get a fashion score, color harmony rating, and skin-tone match for any item, powered by AI vision.',
   },
   {
-    icon: '🎙',
+    icon: '💬',
     title: 'AI Stylist Chatbot',
     description: 'Ask "What should I wear today?" and get context-aware advice based on your actual wardrobe.',
   },

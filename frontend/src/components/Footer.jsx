@@ -24,7 +24,6 @@ export default function Footer() {
               <li><Link to="/contact" className="transition hover:text-white">Contact Us</Link></li>
               {user ? (
                 <>
-                  <li><Link to="/dashboard" className="transition hover:text-white">Dashboard</Link></li>
                   <li><Link to="/wardrobe" className="transition hover:text-white">Wardrobe</Link></li>
                   <li><Link to="/chat" className="transition hover:text-white">AI Stylist</Link></li>
                 </>
