@@ -190,6 +190,17 @@ export default function WardrobeItemPage() {
             </div>
             <span className="text-brand-600">→</span>
           </Link>
+
+          <Link
+            to={`/match-tool?outfitId=${id}`}
+            className="mt-3 flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-5 transition hover:bg-gray-50"
+          >
+            <div>
+              <h2 className="font-semibold text-gray-900">🔗 Find Matches</h2>
+              <p className="mt-1 text-sm text-gray-600">See what pairs best with this item.</p>
+            </div>
+            <span className="text-gray-400">→</span>
+          </Link>
         </div>
       </div>
     </Layout>

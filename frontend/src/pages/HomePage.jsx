@@ -7,21 +7,61 @@ const FEATURES = [
     icon: '👗',
     title: 'Smart Wardrobe',
     description: 'Upload your clothes once and keep a searchable digital closet — category, color, brand, season, and more.',
+    to: '/wardrobe',
   },
   {
     icon: '🤖',
     title: 'AI Outfit Analysis',
     description: 'Get a fashion score, color harmony rating, and skin-tone match for any item, powered by AI vision.',
+    to: '/wardrobe',
   },
   {
     icon: '💬',
     title: 'AI Stylist Chatbot',
     description: 'Ask "What should I wear today?" and get context-aware advice based on your actual wardrobe.',
+    to: '/chat',
   },
   {
     icon: '🌱',
     title: 'Sustainability Score',
     description: 'See how much of your wardrobe you actually use, and get nudged to rewear instead of rebuy.',
+    to: '/dashboard',
+  },
+  {
+    icon: '🎨',
+    title: 'Color Analysis',
+    description: 'Upload a photo and discover your undertone, seasonal palette, and best-fit colors.',
+    to: '/color-analysis',
+  },
+  {
+    icon: '🧍',
+    title: 'Body Analysis',
+    description: 'Get AI-powered insights on your body shape and personalized styling tips.',
+    to: '/body-analysis',
+  },
+  {
+    icon: '🖌️',
+    title: 'Color Picker',
+    description: 'Test any color against your palette and instantly see if it works for you.',
+    to: '/color-picker',
+  },
+  {
+    icon: '🔗',
+    title: 'Match Tool',
+    description: 'Pick an item and let AI find what pairs best with it from your wardrobe.',
+    to: '/match-tool',
+  },
+  {
+    icon: '💖',
+    title: 'Wishlist',
+    description: 'Track the items you want to buy next, with prices, brands, and notes.',
+    to: '/wishlist',
+  },
+  {
+    icon: '⚖️',
+    title: 'Outfit Comparison',
+    description: 'Compare two items head-to-head and let AI pick the winner for any occasion.',
+    to: '/outfit-comparison',
   },
 ];
 
@@ -79,6 +119,11 @@ export default function HomePage() {
               <div className="text-3xl">{f.icon}</div>
               <h3 className="mt-3 font-semibold text-gray-900">{f.title}</h3>
               <p className="mt-2 text-sm text-gray-500">{f.description}</p>
+              {f.to && (
+                <Link to={f.to} className="mt-3 inline-block text-sm font-medium text-brand-600 hover:underline">
+                  Try Now →
+                </Link>
+              )}
             </div>
           ))}
         </div>

@@ -5,6 +5,7 @@ import Layout from '../components/Layout';
 import StatCard from '../components/StatCard';
 import WardrobeMiniList from '../components/WardrobeMiniList';
 import MonthlyUsageChart from '../components/MonthlyUsageChart';
+import PageHeader from '../components/PageHeader';
 import { useAuth } from '../context/AuthContext';
 
 function sustainabilityLevel(score) {
@@ -12,6 +13,17 @@ function sustainabilityLevel(score) {
   if (score >= 40) return { label: 'Good, but can improve', color: 'text-amber-600' };
   return { label: 'Consider reusing outfits more', color: 'text-red-600' };
 }
+
+const STYLE_TOOLS = [
+  { icon: '🎨', title: 'Color Analysis', description: 'Find your undertone and best colors.', to: '/color-analysis', gradient: 'from-pink-500 to-rose-500' },
+  { icon: '🧍', title: 'Body Analysis', description: 'Get styling tips for your body shape.', to: '/body-analysis', gradient: 'from-indigo-500 to-blue-500' },
+  { icon: '🖌️', title: 'Color Picker', description: 'Test any color against your palette.', to: '/color-picker', gradient: 'from-fuchsia-500 to-purple-500' },
+  { icon: '🔗', title: 'Match Tool', description: 'Find what pairs with an item.', to: '/match-tool', gradient: 'from-cyan-500 to-blue-500' },
+  { icon: '💖', title: 'Wishlist', description: 'Track items you want to buy.', to: '/wishlist', gradient: 'from-rose-500 to-pink-500' },
+  { icon: '⚖️', title: 'Outfit Comparison', description: 'Compare two items head-to-head.', to: '/outfit-comparison', gradient: 'from-amber-500 to-orange-500' },
+  { icon: '💬', title: 'AI Stylist Chat', description: 'Chat with your personal AI stylist.', to: '/chat', gradient: 'from-violet-500 to-brand-500' },
+  { icon: '✅', title: 'Outfit Check', description: 'Get an AI rating on any wardrobe item.', to: '/wardrobe', gradient: 'from-emerald-500 to-teal-500' },
+];
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -53,30 +65,53 @@ export default function DashboardPage() {
 
   return (
     <Layout>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Welcome back{user?.first_name ? `, ${user.first_name}` : ''} 👋
-          </h1>
-          <p className="text-sm text-gray-500">Here's how your wardrobe is doing.</p>
-        </div>
-        <Link
-          to="/wardrobe"
-          className="rounded-full bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
-        >
-          + Add Clothing Item
-        </Link>
-      </div>
+      <PageHeader
+        icon="👋"
+        title={`Welcome back${user?.first_name ? `, ${user.first_name}` : ''}`}
+        subtitle="Here's how your wardrobe is doing."
+        gradient="from-brand-500 to-purple-500"
+        action={
+          <Link
+            to="/wardrobe"
+            className="rounded-full bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
+          >
+            + Add Clothing Item
+          </Link>
+        }
+      />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Total Items" value={stats.totals.total_items} />
-        <StatCard label="Worn Items" value={stats.totals.worn_items} />
-        <StatCard label="Unused Items" value={stats.totals.unused_items} />
+        <StatCard icon="👗" label="Total Items" value={stats.totals.total_items} />
+        <StatCard icon="✅" label="Worn Items" value={stats.totals.worn_items} />
+        <StatCard icon="📦" label="Unused Items" value={stats.totals.unused_items} />
         <StatCard
+          icon="⭐"
           label="Avg Fashion Score"
           value={stats.avgFashionScore ? stats.avgFashionScore.toFixed(1) : '—'}
           sublabel="out of 10"
         />
+      </div>
+
+      <div className="mt-8">
+        <p className="mb-3 text-sm font-medium text-gray-500">✨ Style Tools</p>
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {STYLE_TOOLS.map((tool) => (
+            <Link
+              key={tool.to}
+              to={tool.to}
+              className="group rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-lg"
+            >
+              <div
+                className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${tool.gradient} text-lg text-white shadow-sm`}
+              >
+                {tool.icon}
+              </div>
+              <p className="mt-2 font-semibold text-gray-900">{tool.title}</p>
+              <p className="mt-1 text-xs text-gray-500">{tool.description}</p>
+              <p className="mt-2 text-xs font-medium text-brand-600 group-hover:underline">Try Now →</p>
+            </Link>
+          ))}
+        </div>
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import client, { outfitImageUrl } from '../api/client';
 import Layout from '../components/Layout';
+import PageHeader from '../components/PageHeader';
 
 export default function ChatPage() {
   const [history, setHistory] = useState([]);
@@ -75,7 +76,12 @@ export default function ChatPage() {
 
   return (
     <Layout>
-      <h1 className="mb-4 text-2xl font-bold text-gray-900">🤖 AI Stylist Chat</h1>
+      <PageHeader
+        icon="🤖"
+        title="AI Stylist Chat"
+        subtitle="Ask for outfit advice, attach a photo, and get context-aware styling tips."
+        gradient="from-violet-500 to-brand-500"
+      />
 
       <div className="flex h-[65vh] flex-col rounded-2xl border border-gray-200 bg-white shadow-sm">
         <div className="flex-1 overflow-y-auto p-4 space-y-4">

@@ -12,6 +12,12 @@ import WardrobeItemPage from './pages/WardrobeItemPage';
 import AnalysisPage from './pages/AnalysisPage';
 import ProfilePage from './pages/ProfilePage';
 import ChatPage from './pages/ChatPage';
+import ColorAnalysisPage from './pages/ColorAnalysisPage';
+import BodyAnalysisPage from './pages/BodyAnalysisPage';
+import ColorPickerPage from './pages/ColorPickerPage';
+import MatchToolPage from './pages/MatchToolPage';
+import WishlistPage from './pages/WishlistPage';
+import OutfitComparisonPage from './pages/OutfitComparisonPage';
 
 function HomeRoute() {
   const { user, loading } = useAuth();
@@ -35,6 +41,12 @@ function App() {
         <Route path="/wardrobe/:id/analysis" element={<ProtectedRoute><AnalysisPage /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/chat" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
+        <Route path="/color-analysis" element={<ProtectedRoute><ColorAnalysisPage /></ProtectedRoute>} />
+        <Route path="/body-analysis" element={<ProtectedRoute><BodyAnalysisPage /></ProtectedRoute>} />
+        <Route path="/color-picker" element={<ProtectedRoute><ColorPickerPage /></ProtectedRoute>} />
+        <Route path="/match-tool" element={<ProtectedRoute><MatchToolPage /></ProtectedRoute>} />
+        <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
+        <Route path="/outfit-comparison" element={<ProtectedRoute><OutfitComparisonPage /></ProtectedRoute>} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

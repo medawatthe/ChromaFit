@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import client from '../api/client';
 import Layout from '../components/Layout';
+import PageHeader from '../components/PageHeader';
 import { useAuth } from '../context/AuthContext';
 
 const STYLE_OPTIONS = ['Casual', 'Formal', 'Streetwear', 'Minimalist', 'Vintage', 'Sporty', 'Traditional'];
@@ -57,7 +58,12 @@ export default function ProfilePage() {
 
   return (
     <Layout>
-      <h1 className="mb-6 text-2xl font-bold text-gray-900">My Profile</h1>
+      <PageHeader
+        icon="👤"
+        title="My Profile"
+        subtitle="Keep your details up to date for more personalized AI styling."
+        gradient="from-slate-500 to-gray-600"
+      />
 
       <div className="max-w-2xl rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
         <p className="mb-4 text-sm text-gray-500">

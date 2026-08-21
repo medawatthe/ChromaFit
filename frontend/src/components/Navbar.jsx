@@ -26,6 +26,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-20 border-b border-gray-200 bg-white/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <NavLink to="/dashboard" className="flex items-center gap-2">
+          <img src="/favicon.svg" alt="" className="h-8 w-8 rounded-lg" />
           <span className="text-xl font-bold bg-gradient-to-r from-brand-600 to-brand-400 bg-clip-text text-transparent">
             ChromaFit
           </span>

@@ -50,3 +50,48 @@ body {
 .animate-blob-3 {
   animation: blob-float-3 6s ease-in-out infinite;
 }
+
+@keyframes swirl-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes swirl-spin-reverse {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+.swirl-shape {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(45px);
+  opacity: 0.55;
+}
+
+.swirl-shape-1 {
+  top: -20%;
+  left: -15%;
+  width: 60vw;
+  height: 60vw;
+  background: conic-gradient(from 90deg, var(--color-brand-400), var(--color-brand-100), transparent 70%);
+  animation: swirl-spin 40s linear infinite;
+}
+
+.swirl-shape-2 {
+  bottom: -25%;
+  right: -20%;
+  width: 55vw;
+  height: 55vw;
+  background: conic-gradient(from 200deg, #60a5fa, #dbeafe, transparent 70%);
+  animation: swirl-spin-reverse 50s linear infinite;
+}
+
+.swirl-shape-3 {
+  top: 30%;
+  right: 10%;
+  width: 30vw;
+  height: 30vw;
+  background: conic-gradient(from 0deg, var(--color-brand-500), transparent 60%);
+  opacity: 0.3;
+  animation: swirl-spin 60s linear infinite;
+}

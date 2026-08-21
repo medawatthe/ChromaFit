@@ -5,7 +5,7 @@ export default function OutfitCard({ outfit }) {
   return (
     <Link
       to={`/wardrobe/${outfit.id}`}
-      className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md"
+      className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-lg"
     >
       <div className="aspect-square w-full overflow-hidden bg-gray-100">
         <img

@@ -3,6 +3,7 @@ import client from '../api/client';
 import Layout from '../components/Layout';
 import OutfitCard from '../components/OutfitCard';
 import AddOutfitModal from '../components/AddOutfitModal';
+import PageHeader from '../components/PageHeader';
 import { CATEGORIES, OCCASIONS, SEASONS } from '../constants/wardrobeOptions';
 
 export default function WardrobePage() {
@@ -37,18 +38,20 @@ export default function WardrobePage() {
 
   return (
     <Layout>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">My Wardrobe</h1>
-          <p className="text-sm text-gray-500">{outfits.length} item{outfits.length === 1 ? '' : 's'}</p>
-        </div>
-        <button
-          onClick={() => setShowModal(true)}
-          className="rounded-full bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
-        >
-          + Add Clothing Item
-        </button>
-      </div>
+      <PageHeader
+        icon="👗"
+        title="My Wardrobe"
+        subtitle={`${outfits.length} item${outfits.length === 1 ? '' : 's'}`}
+        gradient="from-emerald-500 to-teal-500"
+        action={
+          <button
+            onClick={() => setShowModal(true)}
+            className="rounded-full bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
+          >
+            + Add Clothing Item
+          </button>
+        }
+      />
 
       <div className="mb-6 flex flex-wrap gap-3">
         <input
