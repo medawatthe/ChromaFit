@@ -77,4 +77,177 @@ async function chatWithStylist(message, context = {}, imagePath = null) {
   return result.response.text();
 }
 
-module.exports = { analyzeOutfit, chatWithStylist };
+const COLOR_ANALYSIS_SYSTEM_PROMPT = `You are ChromaFit's personal color analysis engine. You analyze a clear
+photo of a person's face/skin, eyes, and hair and determine their color profile for clothing styling purposes.
+Determine: undertone (warm, cool, or neutral), a seasonal color type (Spring, Summer, Autumn, or Winter) using
+the classic 4-season color analysis system, and a short list of best and worst clothing colors for them, each
+with a representative hex code. Be encouraging and practical, not clinical. If the photo does not clearly show
+a face, do your best with what's visible and note the limitation in ai_summary.`;
+
+const COLOR_ANALYSIS_SCHEMA = {
+  type: SchemaType.OBJECT,
+  properties: {
+    undertone: { type: SchemaType.STRING },
+    seasonal_type: { type: SchemaType.STRING },
+    seasonal_subtype: { type: SchemaType.STRING },
+    best_colors: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: { name: { type: SchemaType.STRING }, hex: { type: SchemaType.STRING } },
+        required: ['name', 'hex'],
+      },
+    },
+    colors_to_avoid: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: { name: { type: SchemaType.STRING }, hex: { type: SchemaType.STRING } },
+        required: ['name', 'hex'],
+      },
+    },
+    ai_summary: { type: SchemaType.STRING },
+  },
+  required: ['undertone', 'seasonal_type', 'best_colors', 'colors_to_avoid', 'ai_summary'],
+};
+
+async function analyzeColorProfile(imagePath, userContext = {}) {
+  const model = genAI.getGenerativeModel({
+    model: MODEL_NAME,
+    systemInstruction: COLOR_ANALYSIS_SYSTEM_PROMPT,
+    generationConfig: {
+      responseMimeType: 'application/json',
+      responseSchema: COLOR_ANALYSIS_SCHEMA,
+    },
+  });
+
+  const imagePart = imageToInlinePart(imagePath);
+  const result = await model.generateContent([
+    `Analyze this person's coloring for a personal color analysis. User context: ${JSON.stringify(userContext)}`,
+    imagePart,
+  ]);
+
+  const raw = result.response.text();
+  return { parsed: JSON.parse(raw), raw };
+}
+
+const BODY_ANALYSIS_SYSTEM_PROMPT = `You are ChromaFit's body shape analysis engine. You analyze a clear,
+full-body photo of a person standing in fitted clothing and determine their body shape for styling purposes,
+using the standard categories: Hourglass, Pear, Apple, Rectangle, Inverted Triangle. If the photo doesn't show
+a clear full body, use "Unknown" and explain why in ai_summary. Be body-positive and practical — this is
+styling guidance, never a health, weight, or appearance judgment.`;
+
+const BODY_ANALYSIS_SCHEMA = {
+  type: SchemaType.OBJECT,
+  properties: {
+    body_shape: { type: SchemaType.STRING },
+    proportions: { type: SchemaType.STRING },
+    styling_tips: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+    avoid_tips: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+    ai_summary: { type: SchemaType.STRING },
+  },
+  required: ['body_shape', 'proportions', 'styling_tips', 'avoid_tips', 'ai_summary'],
+};
+
+async function analyzeBodyShape(imagePath, userContext = {}) {
+  const model = genAI.getGenerativeModel({
+    model: MODEL_NAME,
+    systemInstruction: BODY_ANALYSIS_SYSTEM_PROMPT,
+    generationConfig: {
+      responseMimeType: 'application/json',
+      responseSchema: BODY_ANALYSIS_SCHEMA,
+    },
+  });
+
+  const imagePart = imageToInlinePart(imagePath);
+  const result = await model.generateContent([
+    `Analyze this person's body shape for styling purposes. User context: ${JSON.stringify(userContext)}`,
+    imagePart,
+  ]);
+
+  const raw = result.response.text();
+  return { parsed: JSON.parse(raw), raw };
+}
+
+const MATCH_SYSTEM_PROMPT = `You are ChromaFit's outfit-matching engine. Given one selected clothing item and
+a list of the user's other wardrobe items (structured metadata only, no images), pick which of those OTHER
+items pair best with the selected item and explain why (colour harmony, occasion/season coherence, style).
+Only reference items by the outfit_id values given in the candidate list — never invent an id.`;
+
+const MATCH_SCHEMA = {
+  type: SchemaType.OBJECT,
+  properties: {
+    matches: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          outfit_id: { type: SchemaType.NUMBER },
+          match_score: { type: SchemaType.NUMBER },
+          reason: { type: SchemaType.STRING },
+        },
+        required: ['outfit_id', 'match_score', 'reason'],
+      },
+    },
+    styling_tip: { type: SchemaType.STRING },
+  },
+  required: ['matches', 'styling_tip'],
+};
+
+async function suggestMatches(selectedItem, candidateItems) {
+  const model = genAI.getGenerativeModel({
+    model: MODEL_NAME,
+    systemInstruction: MATCH_SYSTEM_PROMPT,
+    generationConfig: {
+      responseMimeType: 'application/json',
+      responseSchema: MATCH_SCHEMA,
+    },
+  });
+
+  const prompt = `Selected item: ${JSON.stringify(selectedItem)}\n\nCandidate wardrobe items:\n${JSON.stringify(candidateItems)}\n\nReturn up to 6 best matches ordered by match_score descending (0-100 scale).`;
+  const result = await model.generateContent([prompt]);
+
+  const raw = result.response.text();
+  return { parsed: JSON.parse(raw), raw };
+}
+
+const COMPARISON_SYSTEM_PROMPT = `You are ChromaFit's outfit comparison engine. Given two clothing items
+(structured metadata only, no images) and an optional occasion, decide which one is the better choice — or
+declare a tie if they're genuinely comparable — and explain your reasoning for each.`;
+
+const COMPARISON_SCHEMA = {
+  type: SchemaType.OBJECT,
+  properties: {
+    winner: { type: SchemaType.STRING },
+    reason_a: { type: SchemaType.STRING },
+    reason_b: { type: SchemaType.STRING },
+    verdict: { type: SchemaType.STRING },
+  },
+  required: ['winner', 'reason_a', 'reason_b', 'verdict'],
+};
+
+async function compareOutfits(itemA, itemB, occasion) {
+  const model = genAI.getGenerativeModel({
+    model: MODEL_NAME,
+    systemInstruction: COMPARISON_SYSTEM_PROMPT,
+    generationConfig: {
+      responseMimeType: 'application/json',
+      responseSchema: COMPARISON_SCHEMA,
+    },
+  });
+
+  const prompt = `Item A: ${JSON.stringify(itemA)}\n\nItem B: ${JSON.stringify(itemB)}\n\nOccasion: ${occasion || 'general / not specified'}\n\nWhich is the better choice? "winner" must be exactly "A", "B", or "tie".`;
+  const result = await model.generateContent([prompt]);
+
+  const raw = result.response.text();
+  return { parsed: JSON.parse(raw), raw };
+}
+
+module.exports = {
+  analyzeOutfit,
+  chatWithStylist,
+  analyzeColorProfile,
+  analyzeBodyShape,
+  suggestMatches,
+  compareOutfits,
+};

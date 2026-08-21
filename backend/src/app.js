@@ -9,6 +9,10 @@ const userRoutes = require('./routes/userRoutes');
 const wardrobeRoutes = require('./routes/wardrobeRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const colorAnalysisRoutes = require('./routes/colorAnalysisRoutes');
+const bodyAnalysisRoutes = require('./routes/bodyAnalysisRoutes');
+const wishlistRoutes = require('./routes/wishlistRoutes');
+const comparisonRoutes = require('./routes/comparisonRoutes');
 
 const app = express();
 
@@ -33,6 +37,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/outfits', wardrobeRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/color-analysis', colorAnalysisRoutes);
+app.use('/api/body-analysis', bodyAnalysisRoutes);
+app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/compare', comparisonRoutes);
 
 app.use((req, res) => res.status(404).json({ error: 'Not found.' }));
 

@@ -53,20 +53,45 @@ npm run dev       # starts on http://localhost:5173
 
 Open http://localhost:5173 in your browser, register an account, and start adding wardrobe items.
 
-## What's built (MVP)
+## What's built
 
-- Registration & login (JWT-based), full profile editing
+**Account & profile**
+- Registration & login (JWT-based, bcrypt-hashed passwords)
+- Full profile editing (bio, measurements, skin tone, body shape, favorite/least-favorite colors, brands, location, style preferences, theme)
+
+**Wardrobe**
 - Wardrobe CRUD with image upload (name, category, brand, colors, pattern, material, fit, season, occasion, price, notes, etc.)
-- Dashboard: total/worn/unused item counts, sustainability score, top categories, favorite colors, average AI fashion score
-- AI outfit analysis per item (dominant colors, skin-tone match, colour harmony %, fashion score 0–10, occasion fit, styling summary) via Gemini vision
-- AI stylist chatbot with persisted chat history
+- Search & filter by category, occasion, season
+- Wear tracking ("mark worn today") and item detail page with arrow-key / on-screen slideshow navigation between items
+
+**Dashboard**
+- Total/worn/unused item counts, sustainability score, top categories, favorite colors, average AI fashion score
+- Monthly usage chart, most-worn / least-used / unused item lists
+- "Style Tools" quick-access grid linking to all AI tools below
+
+**AI-powered tools** (Google Gemini)
+- **AI Outfit Analysis** — per-item fashion score, color harmony %, skin-tone match, occasion fit, styling summary
+- **AI Stylist Chatbot** — context-aware styling advice based on your actual wardrobe, with persisted history and image-attachment support
+- **Color Analysis** — upload a face photo to get your undertone, seasonal color type, and best/avoid color palettes (photo is analyzed then deleted — never stored)
+- **Body Analysis** — upload a full-body photo to get your body shape, proportions, and styling do's/don'ts (photo analyzed then deleted)
+- **Color Picker** — instant client-side verdict on whether any color suits your undertone/season
+- **Match Tool** — pick a wardrobe item and get AI-ranked pairing suggestions from the rest of your closet
+- **Outfit Comparison** — pit two wardrobe items against each other for a given occasion and get an AI verdict
+
+**Wishlist**
+- Track items you want to buy (name, category, brand, price, notes, optional photo)
+
+**Public site**
+- Home, About, Contact pages with animated hero section and contact form
+- Shared Navbar/Footer across public and authenticated views
 
 ## Not yet built
 
-Everything else in the original spec (admin dashboard, sustainability deep-dive, packing assistant, calendar planner, weather recommendations, shopping suggestions, wishlist, outfit comparison, trend analysis, notifications, monthly PDF reports, smart search) — these can be added incrementally on top of this foundation.
+Deferred from the original spec: admin dashboard, Blend Tool, Smart Packing Assistant, Calendar Outfit Planner, Weather-Based Recommendations, AI Shopping Suggestions, Notification Center, Monthly Fashion Report (PDF), AI Fashion Trend Analysis, Occasion Reminder.
 
 ## Notes
 
 - Passwords are hashed with bcrypt; JWTs expire after 7 days (configurable in `backend/.env`).
 - Uploaded images are stored on disk in `backend/uploads/` and served at `/uploads/<filename>`.
 - `backend/.env` and `frontend/.env` are git-ignored — see the `.env.example` files in each folder.
+

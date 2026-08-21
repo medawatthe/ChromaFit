@@ -111,3 +111,46 @@ CREATE TABLE IF NOT EXISTS contact_messages (
     message      TEXT NOT NULL,
     created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS color_analysis (
+    id                SERIAL PRIMARY KEY,
+    user_id           INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    undertone         VARCHAR(20),
+    seasonal_type     VARCHAR(20),
+    seasonal_subtype  VARCHAR(50),
+    best_colors       JSONB,
+    colors_to_avoid   JSONB,
+    ai_summary        TEXT,
+    raw_response      JSONB,
+    created_at        TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_color_analysis_user_id ON color_analysis(user_id);
+
+CREATE TABLE IF NOT EXISTS body_analysis (
+    id             SERIAL PRIMARY KEY,
+    user_id        INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    body_shape     VARCHAR(30),
+    proportions    TEXT,
+    styling_tips   JSONB,
+    avoid_tips     JSONB,
+    ai_summary     TEXT,
+    raw_response   JSONB,
+    created_at     TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_body_analysis_user_id ON body_analysis(user_id);
+
+CREATE TABLE IF NOT EXISTS wishlist_items (
+    id                SERIAL PRIMARY KEY,
+    user_id           INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    item_name         VARCHAR(150) NOT NULL,
+    category          VARCHAR(50),
+    brand             VARCHAR(100),
+    estimated_price   NUMERIC(10,2),
+    notes             TEXT,
+    image_url         TEXT,
+    created_at        TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_wishlist_user_id ON wishlist_items(user_id);

@@ -11,6 +11,7 @@ const {
   getDashboardStats,
 } = require('../controllers/wardrobeController');
 const { analyzeOutfit } = require('../controllers/analysisController');
+const { matchOutfit } = require('../controllers/matchController');
 
 const router = express.Router();
 
@@ -24,5 +25,6 @@ router.put('/:id', upload.single('image'), updateOutfit);
 router.delete('/:id', deleteOutfit);
 router.post('/:id/wear', logWear);
 router.post('/:id/analyze', analyzeOutfit);
+router.post('/:id/match', matchOutfit);
 
 module.exports = router;
