@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 function formatMonth(monthStr) {
@@ -6,6 +8,8 @@ function formatMonth(monthStr) {
 }
 
 export default function MonthlyUsageChart({ data }) {
+  const scrollRef = useRef(null);
+
   if (!data || data.length === 0) {
     return (
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
@@ -17,30 +21,57 @@ export default function MonthlyUsageChart({ data }) {
 
   const max = Math.max(...data.map((d) => d.count), 1);
 
+  function scrollByAmount(amount) {
+    scrollRef.current?.scrollBy({ left: amount, behavior: 'smooth' });
+  }
+
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-      <p className="mb-4 text-sm font-medium text-gray-500">Monthly Usage</p>
-      <div className="flex items-end gap-3 h-24">
-        {data.map((d) => {
-          const heightPct = Math.max((d.count / max) * 100, 4);
-          return (
-            <div key={d.month} className="flex h-full flex-1 flex-col items-center justify-end">
-              <span className="mb-1 text-xs font-semibold text-gray-700">{d.count}</span>
-              <div
-                className="w-full max-w-8 rounded-t-md bg-brand-500"
-                style={{ height: `${heightPct}%` }}
-                title={`${formatMonth(d.month)}: ${d.count} wear${d.count === 1 ? '' : 's'}`}
-              />
-            </div>
-          );
-        })}
+      <div className="mb-4 flex items-center justify-between">
+        <p className="text-sm font-medium text-gray-500">Monthly Usage</p>
+        <div className="flex gap-1">
+          <button
+            type="button"
+            onClick={() => scrollByAmount(-120)}
+            aria-label="Scroll left"
+            className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-300 text-xs text-gray-500 hover:bg-gray-100"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollByAmount(120)}
+            aria-label="Scroll right"
+            className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-300 text-xs text-gray-500 hover:bg-gray-100"
+          >
+            ›
+          </button>
+        </div>
       </div>
-      <div className="mt-1 flex gap-3">
-        {data.map((d) => (
-          <span key={d.month} className="flex-1 text-center text-xs text-gray-400">
-            {formatMonth(d.month)}
-          </span>
-        ))}
+
+      <div ref={scrollRef} className="overflow-x-auto scroll-smooth">
+        <div className="flex items-end gap-3 h-24" style={{ minWidth: `${data.length * 3}rem` }}>
+          {data.map((d) => {
+            const heightPct = Math.max((d.count / max) * 100, 4);
+            return (
+              <div key={d.month} className="flex h-full w-10 flex-shrink-0 flex-col items-center justify-end">
+                <span className="mb-1 text-xs font-semibold text-gray-700">{d.count}</span>
+                <div
+                  className="w-full max-w-8 rounded-t-md bg-brand-500"
+                  style={{ height: `${heightPct}%` }}
+                  title={`${formatMonth(d.month)}: ${d.count} wear${d.count === 1 ? '' : 's'}`}
+                />
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-1 flex gap-3" style={{ minWidth: `${data.length * 3}rem` }}>
+          {data.map((d) => (
+            <span key={d.month} className="w-10 flex-shrink-0 text-center text-xs text-gray-400">
+              {formatMonth(d.month)}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );
