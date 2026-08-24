@@ -48,7 +48,7 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <Layout>
-        <p className="text-gray-500">Loading dashboard…</p>
+        <p className="text-blue-100">Loading dashboard…</p>
       </Layout>
     );
   }
@@ -93,7 +93,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="mt-8">
-        <p className="mb-3 text-sm font-medium text-gray-500">✨ Style Tools</p>
+        <p className="mb-3 text-sm font-medium text-blue-100">✨ Style Tools</p>
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {STYLE_TOOLS.map((tool) => (
             <Link

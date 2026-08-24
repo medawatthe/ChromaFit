@@ -67,7 +67,7 @@ export default function WardrobePage() {
       </div>
 
       {error && <p className="text-red-600">{error}</p>}
-      {loading && <p className="text-gray-500">Loading wardrobe…</p>}
+      {loading && <p className="text-blue-100">Loading wardrobe…</p>}
 
       {!loading && outfits.length === 0 && (
         <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center text-gray-500">

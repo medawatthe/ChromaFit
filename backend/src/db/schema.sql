@@ -34,10 +34,13 @@ CREATE TABLE IF NOT EXISTS users (
     favorite_brands           TEXT[] DEFAULT '{}',
     language                  VARCHAR(20) DEFAULT 'en',
     theme                     VARCHAR(10) DEFAULT 'light',
+    font_size                 VARCHAR(10) DEFAULT 'medium',
 
     created_at                TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at                TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+ALTER TABLE users ADD COLUMN IF NOT EXISTS font_size VARCHAR(10) DEFAULT 'medium';
 
 CREATE TABLE IF NOT EXISTS outfits (
     id                SERIAL PRIMARY KEY,

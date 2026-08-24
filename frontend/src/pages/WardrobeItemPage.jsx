@@ -79,7 +79,7 @@ export default function WardrobeItemPage() {
   if (loading) {
     return (
       <Layout>
-        <p className="text-gray-500">Loading…</p>
+        <p className="text-blue-100">Loading…</p>
       </Layout>
     );
   }
@@ -99,7 +99,7 @@ export default function WardrobeItemPage() {
           ← Back to wardrobe
         </button>
         {siblingIds.length > 1 && (
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-blue-100">
             {currentIndex + 1} of {siblingIds.length} · use ← → to browse
           </span>
         )}
@@ -149,29 +149,31 @@ export default function WardrobeItemPage() {
         </div>
 
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{outfit.clothing_name || 'Untitled item'}</h1>
-          <p className="text-sm text-gray-500">
-            {outfit.last_worn_date ? `Last worn ${outfit.last_worn_date.slice(0, 10)}` : 'Never marked as worn'}
-          </p>
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+            <h1 className="text-2xl font-bold text-gray-900">{outfit.clothing_name || 'Untitled item'}</h1>
+            <p className="text-sm text-gray-500">
+              {outfit.last_worn_date ? `Last worn ${outfit.last_worn_date.slice(0, 10)}` : 'Never marked as worn'}
+            </p>
 
-          <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
-            <Detail label="Category" value={outfit.category} />
-            <Detail label="Brand" value={outfit.brand} />
-            <Detail label="Color" value={outfit.color} />
-            <Detail label="Secondary Color" value={outfit.secondary_color} />
-            <Detail label="Pattern" value={outfit.pattern} />
-            <Detail label="Material" value={outfit.material} />
-            <Detail label="Sleeve Type" value={outfit.sleeve_type} />
-            <Detail label="Neck Type" value={outfit.neck_type} />
-            <Detail label="Fit Type" value={outfit.fit_type} />
-            <Detail label="Season" value={outfit.season} />
-            <Detail label="Occasion" value={outfit.occasion} />
-            <Detail label="Price" value={outfit.price ? `Rs. ${outfit.price}` : null} />
-          </dl>
+            <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <Detail label="Category" value={outfit.category} />
+              <Detail label="Brand" value={outfit.brand} />
+              <Detail label="Color" value={outfit.color} />
+              <Detail label="Secondary Color" value={outfit.secondary_color} />
+              <Detail label="Pattern" value={outfit.pattern} />
+              <Detail label="Material" value={outfit.material} />
+              <Detail label="Sleeve Type" value={outfit.sleeve_type} />
+              <Detail label="Neck Type" value={outfit.neck_type} />
+              <Detail label="Fit Type" value={outfit.fit_type} />
+              <Detail label="Season" value={outfit.season} />
+              <Detail label="Occasion" value={outfit.occasion} />
+              <Detail label="Price" value={outfit.price ? `Rs. ${outfit.price}` : null} />
+            </dl>
 
-          {outfit.notes && (
-            <p className="mt-4 rounded-lg bg-gray-50 p-3 text-sm text-gray-600">{outfit.notes}</p>
-          )}
+            {outfit.notes && (
+              <p className="mt-4 rounded-lg bg-gray-50 p-3 text-sm text-gray-600">{outfit.notes}</p>
+            )}
+          </div>
 
           <Link
             to={`/wardrobe/${id}/analysis`}

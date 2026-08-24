@@ -112,7 +112,7 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="text-center text-2xl font-bold text-gray-900">Everything you need to dress smarter</h2>
+        <h2 className="text-center text-2xl font-bold text-white">Everything you need to dress smarter</h2>
         <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map((f) => (
             <div key={f.title} className="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm">

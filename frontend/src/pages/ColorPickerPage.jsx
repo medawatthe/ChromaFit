@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import client from '../api/client';
 import Layout from '../components/Layout';
 import PageHeader from '../components/PageHeader';
@@ -58,6 +59,9 @@ export default function ColorPickerPage() {
 
   return (
     <Layout>
+      <Link to="/dashboard" className="mb-4 inline-block text-sm text-brand-600 hover:underline">
+        ← Back to Dashboard
+      </Link>
       <PageHeader
         icon="🖌️"
         title="Color Picker"

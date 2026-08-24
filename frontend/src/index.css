@@ -1,13 +1,15 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --color-brand-50: #fdf2f8;
-  --color-brand-100: #fce7f3;
-  --color-brand-200: #fbcfe8;
-  --color-brand-400: #e879f9;
-  --color-brand-500: #d946ef;
-  --color-brand-600: #c026d3;
-  --color-brand-700: #a21caf;
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
   --font-display: "Segoe UI", "Poppins", sans-serif;
 }
 
@@ -20,6 +22,67 @@ body,
 body {
   font-family: var(--font-display);
   @apply bg-gray-50 text-gray-900;
+}
+
+html[data-font-size="small"] {
+  font-size: 14px;
+}
+
+html[data-font-size="large"] {
+  font-size: 18px;
+}
+
+/* Dark mode: broad overrides for the light-mode utility classes used across the app. */
+.dark body {
+  @apply bg-gray-950 text-gray-100;
+}
+
+.dark .bg-white {
+  background-color: #1e1b2e;
+}
+
+.dark .bg-gray-50 {
+  background-color: #16141f;
+}
+
+.dark .bg-gray-100 {
+  background-color: #262233;
+}
+
+.dark .text-gray-900 {
+  color: #f1f0f5;
+}
+
+.dark .text-gray-800 {
+  color: #e4e2ec;
+}
+
+.dark .text-gray-700 {
+  color: #d3d0dd;
+}
+
+.dark .text-gray-600 {
+  color: #b3aec2;
+}
+
+.dark .text-gray-500 {
+  color: #9c96ad;
+}
+
+.dark .text-gray-400 {
+  color: #857f96;
+}
+
+.dark .border-gray-200 {
+  border-color: #35304a;
+}
+
+.dark .border-gray-300 {
+  border-color: #423c59;
+}
+
+.dark .bg-brand-50 {
+  background-color: rgba(217, 70, 239, 0.1);
 }
 
 @keyframes blob-float-1 {
@@ -64,8 +127,8 @@ body {
 .swirl-shape {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(45px);
-  opacity: 0.55;
+  filter: blur(80px);
+  opacity: 0.35;
 }
 
 .swirl-shape-1 {
@@ -73,7 +136,7 @@ body {
   left: -15%;
   width: 60vw;
   height: 60vw;
-  background: conic-gradient(from 90deg, var(--color-brand-400), var(--color-brand-100), transparent 70%);
+  background: conic-gradient(from 90deg, #3b82f6, #1e40af, transparent 70%);
   animation: swirl-spin 40s linear infinite;
 }
 
@@ -82,7 +145,7 @@ body {
   right: -20%;
   width: 55vw;
   height: 55vw;
-  background: conic-gradient(from 200deg, #60a5fa, #dbeafe, transparent 70%);
+  background: conic-gradient(from 200deg, #2563eb, #1e3a8a, transparent 70%);
   animation: swirl-spin-reverse 50s linear infinite;
 }
 
@@ -91,7 +154,7 @@ body {
   right: 10%;
   width: 30vw;
   height: 30vw;
-  background: conic-gradient(from 0deg, var(--color-brand-500), transparent 60%);
-  opacity: 0.3;
+  background: conic-gradient(from 0deg, #60a5fa, transparent 60%);
+  opacity: 0.2;
   animation: swirl-spin 60s linear infinite;
 }

@@ -47,7 +47,7 @@ export default function AnalysisPage() {
   if (loading) {
     return (
       <Layout>
-        <p className="text-gray-500">Loading…</p>
+        <p className="text-blue-100">Loading…</p>
       </Layout>
     );
   }

@@ -4,7 +4,7 @@ import SwirlBackground from './SwirlBackground';
 
 export default function PublicLayout({ children }) {
   return (
-    <div className="relative flex min-h-screen flex-col bg-gradient-to-br from-brand-50/60 via-white to-blue-50/50">
+    <div className="relative flex min-h-screen flex-col bg-gradient-to-b from-slate-900 to-blue-950">
       <SwirlBackground />
       <PublicNavbar />
       <main className="flex-1">{children}</main>

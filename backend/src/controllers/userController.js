@@ -26,6 +26,7 @@ const EDITABLE_FIELDS = {
   coverPhotoUrl: 'cover_photo_url',
   language: 'language',
   theme: 'theme',
+  fontSize: 'font_size',
 };
 
 async function getProfile(req, res) {

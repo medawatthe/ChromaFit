@@ -8,8 +8,8 @@ export default function PageHeader({ icon, title, subtitle, gradient = 'from-bra
           {icon}
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-          {subtitle && <p className="mt-0.5 text-sm text-gray-500">{subtitle}</p>}
+          <h1 className="text-2xl font-bold text-white">{title}</h1>
+          {subtitle && <p className="mt-0.5 text-sm text-blue-100">{subtitle}</p>}
         </div>
       </div>
       {action}
