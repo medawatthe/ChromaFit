@@ -84,6 +84,11 @@ Open http://localhost:5173 in your browser, register an account, and start addin
 **Settings**
 - Light/dark theme toggle and small/medium/large font size, applied instantly site-wide and saved to your account
 
+**Admin panel** (role-based, admin accounts only)
+- Site-wide stats (users, wardrobe items, AI analyses, chat messages, wishlist items, contact messages, recent signups)
+- User management (promote/demote to admin, delete accounts)
+- View messages submitted through the Contact Us form
+
 **Public site**
 - Home, About, Contact pages with animated hero section and contact form
 - Shared Navbar/Footer across public and authenticated views
@@ -91,7 +96,7 @@ Open http://localhost:5173 in your browser, register an account, and start addin
 
 ## Not yet built
 
-Deferred from the original spec: admin dashboard, Blend Tool, Smart Packing Assistant, Calendar Outfit Planner, Weather-Based Recommendations, AI Shopping Suggestions, Notification Center, Monthly Fashion Report (PDF), AI Fashion Trend Analysis, Occasion Reminder.
+Deferred from the original spec: Blend Tool, Smart Packing Assistant, Calendar Outfit Planner, Weather-Based Recommendations, AI Shopping Suggestions, Notification Center, Monthly Fashion Report (PDF), AI Fashion Trend Analysis, Occasion Reminder.
 
 ## Notes
 
