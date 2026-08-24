@@ -84,6 +84,7 @@ Open http://localhost:5173 in your browser, register an account, and start addin
 **Public site**
 - Home, About, Contact pages with animated hero section and contact form
 - Shared Navbar/Footer across public and authenticated views
+- Site-wide animated gradient background, custom logo/favicon, and consistent gradient page headers across every screen
 
 ## Not yet built
 
