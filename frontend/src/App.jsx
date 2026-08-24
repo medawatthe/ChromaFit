@@ -21,6 +21,7 @@ import MatchToolPage from './pages/MatchToolPage';
 import WishlistPage from './pages/WishlistPage';
 import OutfitComparisonPage from './pages/OutfitComparisonPage';
 import SettingsPage from './pages/SettingsPage';
+import AdminPage from './pages/AdminPage';
 
 function HomeRoute() {
   const { user, loading } = useAuth();
@@ -55,6 +56,7 @@ function App() {
           <Route path="/wardrobe/:id/analysis" element={<ProtectedRoute><AnalysisPage /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute adminOnly><AdminPage /></ProtectedRoute>} />
           <Route path="/chat" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
           <Route path="/color-analysis" element={<ProtectedRoute><ColorAnalysisPage /></ProtectedRoute>} />
           <Route path="/body-analysis" element={<ProtectedRoute><BodyAnalysisPage /></ProtectedRoute>} />

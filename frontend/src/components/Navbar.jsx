@@ -72,6 +72,21 @@ export default function Navbar() {
           <span className="hidden text-sm text-blue-200 sm:inline">
             {user?.first_name ? `Hi, ${user.first_name}` : ''}
           </span>
+          {user?.role === 'admin' && (
+            <NavLink
+              to="/admin"
+              aria-label="Admin"
+              className={({ isActive }) =>
+                `flex h-9 w-9 items-center justify-center rounded-full border text-lg transition ${
+                  isActive
+                    ? 'border-brand-400 bg-brand-500/20 text-brand-300'
+                    : 'border-slate-600 text-blue-200 hover:bg-slate-800'
+                }`
+              }
+            >
+              🛡️
+            </NavLink>
+          )}
           <NavLink
             to="/settings"
             aria-label="Settings"

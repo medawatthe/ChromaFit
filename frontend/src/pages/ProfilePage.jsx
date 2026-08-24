@@ -65,7 +65,7 @@ export default function ProfilePage() {
         gradient="from-slate-500 to-gray-600"
       />
 
-      <div className="max-w-2xl rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="mx-auto max-w-2xl rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
         <p className="mb-4 text-sm text-gray-500">
           {user?.username} · {user?.email}
         </p>

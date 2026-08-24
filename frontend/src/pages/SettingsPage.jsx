@@ -66,7 +66,7 @@ export default function SettingsPage() {
         </p>
       )}
 
-      <div className="max-w-2xl space-y-6">
+      <div className="mx-auto max-w-2xl space-y-6">
         <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <h2 className="mb-1 font-semibold text-gray-900">Appearance</h2>
           <p className="mb-4 text-sm text-gray-500">Choose a light or dark theme for the app.</p>
