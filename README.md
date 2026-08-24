@@ -81,10 +81,13 @@ Open http://localhost:5173 in your browser, register an account, and start addin
 **Wishlist**
 - Track items you want to buy (name, category, brand, price, notes, optional photo)
 
+**Settings**
+- Light/dark theme toggle and small/medium/large font size, applied instantly site-wide and saved to your account
+
 **Public site**
 - Home, About, Contact pages with animated hero section and contact form
 - Shared Navbar/Footer across public and authenticated views
-- Site-wide animated gradient background, custom logo/favicon, and consistent gradient page headers across every screen
+- Site-wide navy blue theme with an animated gradient background, custom logo/favicon, and consistent gradient page headers across every screen
 
 ## Not yet built
 
